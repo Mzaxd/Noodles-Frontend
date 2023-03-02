@@ -1,4 +1,8 @@
-# vue
+# Noodles前端工程
+
+搭配Noodles使用。以下为原版开发Kit的Readme
+
+## vue
 
 This template should help get you started developing with Vue 3 in Vite.
 

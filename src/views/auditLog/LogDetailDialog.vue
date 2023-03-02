@@ -51,20 +51,13 @@ const handleDrawerModelValueUpdate = (val) => {
 </script>
 
 <template>
-  
-  <VDialog
-    temporary
-    :width="600"
-    location="end"
-    class="scrollable-content"
-    :model-value="props.isDrawerOpen"
-    @update:model-value="handleDrawerModelValueUpdate"
-  >
+  <VDialog temporary :width="600" location="end" class="scrollable-content" :model-value="props.isDrawerOpen"
+    @update:model-value="handleDrawerModelValueUpdate">
     <VCard title="事件详细信息">
       <VCardText>
         <VRow>
           <VCol cols="12">
-            <VTextarea readonly v-model="param" placeholder="参数" auto-grow >
+            <VTextarea readonly v-model="param" placeholder="参数" auto-grow>
             </VTextarea>
           </VCol>
         </VRow>

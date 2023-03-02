@@ -31,7 +31,7 @@ const statistics = ref([
   },
 ])
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
   update()
 })
 
@@ -53,23 +53,10 @@ defineExpose({
   <VCard title="总览">
     <VCardText>
       <VRow>
-        <VCol
-          v-for="item in statistics"
-          :key="item.title"
-          cols="6"
-          md="3"
-        >
+        <VCol v-for="item in statistics" :key="item.title" cols="6" md="3">
           <div class="d-flex">
-            <VAvatar
-              :color="item.color"
-              variant="tonal"
-              size="42"
-              class="me-3"
-            >
-              <VIcon
-                size="24"
-                :icon="item.icon"
-              />
+            <VAvatar :color="item.color" variant="tonal" size="42" class="me-3">
+              <VIcon size="24" :icon="item.icon" />
             </VAvatar>
 
             <div class="d-flex flex-column">
