@@ -95,7 +95,7 @@ const initTerm = () => {
 
 //webShell主题
 const initSocket = () => {
-    const WebSocketUrl = "ws://localhost:6081/ws/ssh/" + sshId.value
+    const WebSocketUrl = import.meta.env.VITE_WS_URL + "/ssh/" + sshId.value
     websocket = new WebSocket(WebSocketUrl);
     // 连接成功
     websocket.onopen = socketOnOpen

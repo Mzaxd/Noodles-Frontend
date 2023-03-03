@@ -45,8 +45,7 @@ const initWebSocket = () => {
 onMounted(() => {
   // WebSocket
   if ('WebSocket' in window) {
-    // 连接地址:ws://127.0.0.1:8880/ws/xxx
-    websocket = new WebSocket("ws://localhost:6081/ws/getHostDynamicData/" + hostId.value)
+    websocket = new WebSocket(import.meta.env.VITE_WS_URL + "/getHostDynamicData/" + hostId.value)
     startSendDynamicData()
     initWebSocket()
   } else {

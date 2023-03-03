@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 
+
 const router = useRouter()
 const axiosIns = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 10000,
 })
 
