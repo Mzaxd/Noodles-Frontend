@@ -1,123 +1,125 @@
 <script setup>
-import { ref } from "vue"
+import { ref } from "vue";
 import axios from "@axios";
 
 const route = useRoute();
 const hostId = ref(route.params.id);
-const toggleSwitch = ref(false)
+const toggleSwitch = ref(false);
 
-let dynamicData = ref()
+let dynamicData = ref();
 
-let websocket = null
+let websocket = null;
 
 const onOpen = () => {
-  console.log('WebSocket连接成功,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接成功,状态码:", websocket.readyState);
+};
 
-const onMessage = event => {
+const onMessage = (event) => {
   // console.log('WebSocket收到消息:', event.data)
-  dynamicData = JSON.parse(event.data)
-  update()
-}
+  dynamicData = JSON.parse(event.data);
+  console.log(dynamicData);
+  update();
+};
 
 const onError = () => {
-  console.log('WebSocket连接错误,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接错误,状态码:", websocket.readyState);
+};
 
 const onClose = () => {
-  console.log('WebSocket连接关闭,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接关闭,状态码:", websocket.readyState);
+};
 
 const initWebSocket = () => {
   // 连接成功
-  websocket.onopen = onOpen
+  websocket.onopen = onOpen;
 
   // 收到消息的回调
-  websocket.onmessage = onMessage
+  websocket.onmessage = onMessage;
 
   // 连接错误
-  websocket.onerror = onError
+  websocket.onerror = onError;
 
   // 连接关闭的回调
-  websocket.onclose = onClose
-}
+  websocket.onclose = onClose;
+};
 
 onMounted(() => {
   // WebSocket
-  if ('WebSocket' in window) {
-    websocket = new WebSocket(import.meta.env.VITE_WS_URL + "/getHostDynamicData/" + hostId.value)
-    startSendDynamicData()
-    initWebSocket()
+  if ("WebSocket" in window) {
+    websocket = new WebSocket(
+      import.meta.env.VITE_WS_URL + "/getHostDynamicData/" + hostId.value
+    );
+    startSendDynamicData();
+    initWebSocket();
   } else {
-    alert('当前浏览器 不支持websocket')
+    alert("当前浏览器 不支持websocket");
   }
-})
+});
 
 onUnmounted(() => {
-  console.log("关闭websocket连接")
-  websocket.close()
-  stopSendDynamicData()
-})
+  console.log("关闭websocket连接");
+  websocket.close();
+  stopSendDynamicData();
+});
 
 const startSendDynamicData = () => {
   axios.get("/host/startSendDynamicData/" + hostId.value).then((r) => {
     if (r.code == 200) {
-      toggleSwitch.value = true
+      toggleSwitch.value = true;
     }
   });
-}
+};
 
 const stopSendDynamicData = () => {
   axios.get("/host/stopSendDynamicData/" + hostId.value).then((r) => {
     if (r.code == 200) {
-      toggleSwitch.value = false
+      toggleSwitch.value = false;
     }
   });
-}
+};
 
 const changeSwitch = () => {
   if (toggleSwitch.value) {
-    startSendDynamicData()
+    startSendDynamicData();
   } else {
-    stopSendDynamicData()
+    stopSendDynamicData();
   }
-}
+};
 
 const statistics = ref([
   {
-    title: 'CPU Load',
+    title: "CPU Load",
     num: "None",
-    icon: 'tabler-chart-pie-2',
-    color: 'error',
+    icon: "tabler-chart-pie-2",
+    color: "error",
   },
   {
-    title: 'Mem Free',
+    title: "Mem Free",
     num: "None",
-    icon: 'tabler-server',
-    color: 'success',
+    icon: "tabler-server",
+    color: "success",
   },
   {
-    title: 'Downstream Rate',
+    title: "Downstream Rate",
     num: "None",
-    icon: 'tabler-arrow-down',
-    color: 'primary',
+    icon: "tabler-arrow-down",
+    color: "primary",
   },
   {
-    title: 'Upstream Rate',
+    title: "Upstream Rate",
     num: "None",
-    icon: 'tabler-arrow-up',
-    color: 'success',
+    icon: "tabler-arrow-up",
+    color: "success",
   },
-])
+]);
 
 const update = () => {
-  statistics.value[0].num = dynamicData[1].cpuLoad + ' %'
-  statistics.value[1].num = dynamicData[1].memFree + ' GB'
+  statistics.value[0].num = dynamicData[hostId.value].cpuLoad + " %";
+  statistics.value[1].num = dynamicData[hostId.value].memFree + " GB";
   //rx下行速率 tx上行速率
-  statistics.value[2].num = dynamicData[1].rxPercent + ' MB/s'
-  statistics.value[3].num = dynamicData[1].txPercent + ' MB/s'
-}
-
+  statistics.value[2].num = dynamicData[hostId.value].rxPercent + " MB/s";
+  statistics.value[3].num = dynamicData[hostId.value].txPercent + " MB/s";
+};
 </script>
 
 <template>
@@ -125,7 +127,11 @@ const update = () => {
     <template #append>
       <div class="mt-n4 me-n2">
         <VBtn icon color="default" size="x-small" variant="plain">
-          <VSwitch v-model="toggleSwitch" label="实时监控" @change="changeSwitch()" />
+          <VSwitch
+            v-model="toggleSwitch"
+            label="实时监控"
+            @change="changeSwitch()"
+          />
         </VBtn>
       </div>
     </template>
