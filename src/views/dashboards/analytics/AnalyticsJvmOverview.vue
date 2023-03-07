@@ -1,5 +1,4 @@
 <script setup>
-
 let dynamicData = null;
 
 const total = ref();
@@ -8,69 +7,69 @@ const max = ref();
 const jdkVersion = ref();
 const free = ref();
 const user = ref();
-const freeRate = ref()
+const freeRate = ref();
 
-let websocket = null
+let websocket = null;
 
 const onOpen = () => {
-  console.log('WebSocket连接成功,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接成功,状态码:", websocket.readyState);
+};
 
-const onMessage = event => {
-  // console.log('WebSocket收到消息:', event.data)
-  dynamicData = JSON.parse(event.data)
-  total.value = dynamicData.total
-  usageRate.value = Number(dynamicData.usageRate.replace('%', '')).toFixed(1) + '%'
-  max.value = dynamicData.max
-  jdkVersion.value = dynamicData.jdkVersion
-  free.value = dynamicData.free
-  user.value = dynamicData.user
-  
-  freeRate.value = (100 - usageRate.value.replace('%', '')).toFixed(1) + '%'
-}
+const onMessage = (event) => {
+  dynamicData = JSON.parse(event.data);
+  total.value = dynamicData.total;
+  usageRate.value =
+    Number(dynamicData.usageRate.replace("%", "")).toFixed(1) + "%";
+  max.value = dynamicData.max;
+  jdkVersion.value = dynamicData.jdkVersion;
+  free.value = dynamicData.free;
+  user.value = dynamicData.user;
+
+  freeRate.value = (100 - usageRate.value.replace("%", "")).toFixed(1) + "%";
+};
 
 const onError = () => {
-  console.log('WebSocket连接错误,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接错误,状态码:", websocket.readyState);
+};
 
 const onClose = () => {
-  console.log('WebSocket连接关闭,状态码:', websocket.readyState)
-}
+  console.log("WebSocket连接关闭,状态码:", websocket.readyState);
+};
 
 const initWebSocket = () => {
   // 连接成功
-  websocket.onopen = onOpen
+  websocket.onopen = onOpen;
 
   // 收到消息的回调
-  websocket.onmessage = onMessage
+  websocket.onmessage = onMessage;
 
   // 连接错误
-  websocket.onerror = onError
+  websocket.onerror = onError;
 
   // 连接关闭的回调
-  websocket.onclose = onClose
-}
+  websocket.onclose = onClose;
+};
 
 onMounted(() => {
-  console.log(import.meta.env.VITE_WS_URL)
   // WebSocket
-  if ('WebSocket' in window) {
-    websocket = new WebSocket(import.meta.env.VITE_WS_URL + "/getNoodlesJvmInfo")
+  if ("WebSocket" in window) {
+    websocket = new WebSocket(
+      import.meta.env.VITE_WS_URL + "/getNoodlesJvmInfo"
+    );
 
-    initWebSocket()
+    initWebSocket();
 
     // 关闭
     // websocket.close();
   } else {
-    alert('当前浏览器 不支持websocket')
+    alert("当前浏览器 不支持websocket");
   }
-})
+});
 
 onUnmounted(() => {
-  console.log("关闭websocket连接")
-  websocket.close()
-})
-
+  console.log("关闭websocket连接");
+  websocket.close();
+});
 </script>
 <template>
   <VCard>
@@ -88,7 +87,13 @@ onUnmounted(() => {
       <VRow no-gutters>
         <VCol cols="5">
           <div class="d-flex align-center mb-3">
-            <VAvatar color="warning" variant="tonal" :size="30" rounded class="me-2">
+            <VAvatar
+              color="warning"
+              variant="tonal"
+              :size="30"
+              rounded
+              class="me-2"
+            >
               <VIcon size="18" icon="tabler-stack-2" />
             </VAvatar>
 
@@ -123,14 +128,19 @@ onUnmounted(() => {
             </VAvatar>
           </div>
           <h6 class="text-h6">
-            {{ freeRate }} 
+            {{ freeRate }}
           </h6>
           <span class="text-sm text-disabled">{{ free }}</span>
         </VCol>
       </VRow>
 
       <div class="mt-6">
-        <VProgressLinear :model-value="usageRate" color="primary" height="8" rounded />
+        <VProgressLinear
+          :model-value="usageRate"
+          color="primary"
+          height="8"
+          rounded
+        />
       </div>
     </VCardText>
   </VCard>
