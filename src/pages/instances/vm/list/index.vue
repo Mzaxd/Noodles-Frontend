@@ -31,10 +31,10 @@ const msg = ref("");
 const Message = (r) => {
   if (r.code == 200) {
     snackBarColor.value = "success";
-    msg.value = 'o(^▽^)o ' + r.msg
+    msg.value = "o(^▽^)o " + r.msg;
   } else {
-    snackBarColor.value =  "error";
-    msg.value = '╥﹏╥... ' + r.msg;
+    snackBarColor.value = "error";
+    msg.value = "╥﹏╥... " + r.msg;
   }
   isSnackbarVisible.value = true;
 };
@@ -197,13 +197,13 @@ const resolveNotifyVariant = (notify) => {
   return "primary";
 };
 
-const newPage = url => {
-  window.open(url)
-}
+const newPage = (url) => {
+  window.open(url);
+};
 const newTerminalPage = (sshId) => {
-  const protocol = window.location.protocol
-  const host = window.location.host
-  const url = protocol + "//" + host+"/terminal/" + sshId
+  const protocol = window.location.protocol;
+  const host = window.location.host;
+  const url = protocol + "//" + host + "/terminal/" + sshId;
   window.open(url);
 };
 </script>
@@ -359,9 +359,9 @@ const newTerminalPage = (sshId) => {
                       <h6 class="text-base">
                         {{ vm.name }}
                       </h6>
-                      <span class="text-sm text-disabled"
-                        >{{ vm.manageIp }}</span
-                      >
+                      <span class="text-sm text-disabled">{{
+                        vm.manageIp
+                      }}</span>
                     </div>
                   </div>
                 </td>
@@ -381,7 +381,7 @@ const newTerminalPage = (sshId) => {
                       size="x-small"
                     >
                       <VImg
-                        v-if="vm.avatar"
+                        v-if="vm.os.kernel"
                         :src="resolveOsAvatar(vm.os.kernel)"
                       />
                       <span v-else>{{ vm.name }}</span>
@@ -406,25 +406,37 @@ const newTerminalPage = (sshId) => {
                 </td>
 
                 <td class="text-center">
-              <VAvatar
-                size="25"
-                :color="resolveNotifyVariant(vm.notify)"
-                variant="tonal"
-              >
-                <VIcon v-if="vm.notify == 0" size="22" icon="tabler-bell-x" />
-                <VIcon v-if="vm.notify == 1" size="22" icon="tabler-browser" />
-                <VIcon v-if="vm.notify == 2" size="22" icon="tabler-mail" />
-                <VIcon v-if="vm.notify == 3" size="22" icon="tabler-browser" />
-              </VAvatar>
-              <VAvatar
-                v-if="vm.notify == 3"
-                size="25"
-                :color="resolveNotifyVariant(vm.notify)"
-                variant="tonal"
-              >
-                <VIcon v-if="vm.notify == 3" size="22" icon="tabler-mail" />
-              </VAvatar>
-            </td>
+                  <VAvatar
+                    size="25"
+                    :color="resolveNotifyVariant(vm.notify)"
+                    variant="tonal"
+                  >
+                    <VIcon
+                      v-if="vm.notify == 0"
+                      size="22"
+                      icon="tabler-bell-x"
+                    />
+                    <VIcon
+                      v-if="vm.notify == 1"
+                      size="22"
+                      icon="tabler-browser"
+                    />
+                    <VIcon v-if="vm.notify == 2" size="22" icon="tabler-mail" />
+                    <VIcon
+                      v-if="vm.notify == 3"
+                      size="22"
+                      icon="tabler-browser"
+                    />
+                  </VAvatar>
+                  <VAvatar
+                    v-if="vm.notify == 3"
+                    size="25"
+                    :color="resolveNotifyVariant(vm.notify)"
+                    variant="tonal"
+                  >
+                    <VIcon v-if="vm.notify == 3" size="22" icon="tabler-mail" />
+                  </VAvatar>
+                </td>
 
                 <!-- 👉 Status -->
                 <td class="text-center">
@@ -456,8 +468,8 @@ const newTerminalPage = (sshId) => {
 
                     <VMenu activator="parent">
                       <VList>
-                        <VListItem 
-                          v-if="vm.manageIp" 
+                        <VListItem
+                          v-if="vm.manageIp"
                           @click="newPage(vm.manageIp)"
                         >
                           <VBtn
@@ -508,15 +520,7 @@ const newTerminalPage = (sshId) => {
           <VDivider />
 
           <VCardText
-            class="
-              d-flex
-              align-center
-              flex-wrap
-              justify-space-between
-              gap-4
-              py-3
-              px-5
-            "
+            class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5"
           >
             <span class="text-sm text-disabled">
               {{ paginationData }}
