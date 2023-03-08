@@ -1,80 +1,26 @@
 <script setup>
-import { useProjectStore } from '@/views/dashboards/analytics/useProjectStore'
-import { avatarText } from '@core/utils/formatters'
+import { avatarText } from "@core/utils/formatters";
+import { ref } from "vue";
+import axios from "@axios";
+import qs from "qs";
 
-const projectStore = useProjectStore()
-const searchQuery = ref('')
-const rowPerPage = ref(5)
-const currentPage = ref(1)
-const totalPage = ref(1)
-const totalProjects = ref(0)
-const projects = ref([])
-const selectedRows = ref([])
-const selectAllProject = ref(false)
+const servirs = ref([]);
 
-// 👉 Fetch Projects
-watchEffect(() => {
-  projectStore.fetchProjects({
-    q: searchQuery.value,
-    perPage: rowPerPage.value,
-    currentPage: currentPage.value,
-  }).then(response => {
-    projects.value = response.data.projects
-    totalPage.value = response.data.totalPage
-    totalProjects.value = response.data.totalProjects
-  }).catch(error => {
-    console.log(error)
-  })
-})
+const fetchAffectedServir = () => {
+  axios.get("/dashboard/getAffectedServirList").then((response) => {
+    servirs.value = response.data;
+  });
+};
 
-// 👉 Fetch Projects
-watchEffect(() => {
-  if (currentPage.value > totalPage.value)
-    currentPage.value = totalPage.value
-})
-
-// 👉 Computing pagination data
-const paginationData = computed(() => {
-  const firstIndex = projects.value.length ? (currentPage.value - 1) * rowPerPage.value + 1 : 0
-  const lastIndex = projects.value.length + (currentPage.value - 1) * rowPerPage.value
-
-  return `Showing ${firstIndex} to ${lastIndex} of ${totalProjects.value} entries`
-})
-
-// 👉 Add/Remove all checkbox ids in/from array
-const selectUnselectAll = () => {
-  selectAllProject.value = !selectAllProject.value
-  if (selectAllProject.value) {
-    projects.value.forEach(project => {
-      if (!selectedRows.value.includes(`check${project.status}`))
-        selectedRows.value.push(`check${project.status}`)
-    })
-  } else {
-    selectedRows.value = []
-  }
-}
-
-// 👉 watch if checkbox array is empty all checkbox should be uncheck
-watch(selectedRows, () => {
-  if (!selectedRows.value.length)
-    selectAllProject.value = false
-}, { deep: true })
-
-const addRemoveIndividualCheckbox = checkID => {
-  if (selectedRows.value.includes(checkID)) {
-    const index = selectedRows.value.indexOf(checkID)
-
-    selectedRows.value.splice(index, 1)
-  } else {
-    selectedRows.value.push(checkID)
-    selectAllProject.value = true
-  }
-}
+// 👉 Fetch servirs
+watchEffect(fetchAffectedServir);
 </script>
 
 <template>
-  <VCard v-if="projects">
-    <VCardItem class="project-header d-flex flex-wrap justify-space-between py-4 gap-4">
+  <VCard v-if="servirs">
+    <VCardItem
+      class="servir-header d-flex flex-wrap justify-space-between py-4 gap-4"
+    >
       <VCardTitle>异常服务</VCardTitle>
     </VCardItem>
 
@@ -85,49 +31,77 @@ const addRemoveIndividualCheckbox = checkID => {
       <!-- 👉 Table head -->
       <thead>
         <tr>
-          <th scope="col" class="font-weight-semibold">
-            名称
-          </th>
-          <th scope="col" class="font-weight-semibold">
-            异常实例
-          </th>
+          <th scope="col" class="font-weight-semibold">名称</th>
+          <th scope="col" class="font-weight-semibold">异常实例</th>
         </tr>
       </thead>
 
       <!-- 👉 Table Body -->
       <tbody>
-        <tr v-for="project in projects" :key="project.name" style="height: 3.5rem;">
-
+        <tr v-for="servir in servirs" :key="servir.name" style="height: 3.5rem">
           <!-- 👉 Name -->
           <td>
             <div class="d-flex align-center gap-3">
               <VAvatar variant="tonal" color="primary" size="38">
-                <VImg v-if="project.logo.length" :src="project.logo" />
-                <span v-else class="font-weight-semibold">{{ avatarText(project.name) }}</span>
+                <VImg v-if="servir.avatar" :src="servir.avatar" />
+                <span v-else class="font-weight-semibold">{{
+                  avatarText(servir.name)
+                }}</span>
               </VAvatar>
 
               <div>
                 <h6 class="text-base text-medium-emphasis font-weight-semibold">
-                  {{ project.name }}
+                  {{ servir.name }}
                 </h6>
-                <span class="text-disabled">{{ project.date }}</span>
+                <span class="text-disabled">{{ servir.description }}</span>
               </div>
             </div>
           </td>
 
-          <!-- 👉 Leader -->
-          <td class="text-medium-emphasis">
-            {{ project.leader }}
+          <!-- 👉 Instances -->
+          <td>
+            <VAvatar
+              v-for="host in servir.hosts"
+              :key="host.id"
+              rounded="lg"
+              variant="tonal"
+              class="me-3"
+              size="small"
+            >
+              <VImg v-if="host.avatar" :src="host.avatar" />
+              <VTooltip
+                location="top"
+                activator="parent"
+                transition="scale-transition"
+              >
+                {{ host.name }}({{ host.description }})
+              </VTooltip>
+            </VAvatar>
+            <VAvatar
+              v-for="container in servir.containers"
+              :key="container.id"
+              rounded="lg"
+              variant="tonal"
+              class="me-3"
+              size="small"
+            >
+              <VImg v-if="container.avatar" :src="container.avatar" />
+              <VTooltip
+                location="top"
+                activator="parent"
+                transition="scale-transition"
+              >
+                {{ container.name }}({{ container.description }})
+              </VTooltip>
+            </VAvatar>
           </td>
         </tr>
       </tbody>
 
       <!-- 👉 table footer  -->
-      <tfoot v-show="!projects.length">
+      <tfoot v-show="!servirs.length">
         <tr>
-          <td colspan="8" class="text-center text-body-1">
-            No data available
-          </td>
+          <td colspan="8" class="text-center text-body-1">No data available</td>
         </tr>
       </tfoot>
     </VTable>
@@ -135,20 +109,12 @@ const addRemoveIndividualCheckbox = checkID => {
 
     <VDivider />
 
-    <!-- SECTION Pagination -->
-    <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3">
-      <!-- 👉 Pagination meta -->
-      <span class="text-sm text-disabled">{{ paginationData }}</span>
-
-      <!-- 👉 Pagination -->
-      <VPagination v-model="currentPage" size="small" :total-visible="2" :length="totalPage" />
-    </VCardText>
     <!-- !SECTION -->
   </VCard>
 </template>
 
 <style lang="scss">
-.project-header .v-card-item__append {
+.servir-header .v-card-item__append {
   padding-inline-start: 0;
 }
 </style>
