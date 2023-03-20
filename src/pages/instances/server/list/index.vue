@@ -310,7 +310,7 @@ const newTerminalPage = (sshId) => {
                   size="x-small"
                 >
                   <VImg
-                    v-if="host.avatar"
+                    v-if="host.os.kernel"
                     :src="resolveOsAvatar(host.os.kernel)"
                   />
                   <span v-else>{{ avatarText(host.name) }}</span>
