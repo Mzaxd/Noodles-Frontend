@@ -1,5 +1,7 @@
 <script setup>
 import "xterm/css/xterm.css";
+import axios from "@axios";
+import { ref } from "vue";
 import { debounce } from "lodash";
 import { Terminal } from "xterm";
 import { FitAddon } from "xterm-addon-fit";
@@ -19,25 +21,30 @@ let first = true;
 const props = defineProps({
   terminalDetail: Object,
   type: String,
+  rendererType: String,
+  fontSize: Number,
+  cursorBlink: Boolean,
+  foreground: String,
+  background: String
 });
 
 const fitAddon = new FitAddon();
 
 const initTerm = () => {
   term = new Terminal({
-    rendererType: "webgl ", //渲染类型
+    rendererType: props.rendererType, //渲染类型
     rows: rows, //行数
     cols: cols, // 设置之后会输入多行之后覆盖现象
     convertEol: true, //启用时，光标将设置为下一行的开头
-    fontSize: 14, //字体大小
+    fontSize: props.fontSize, //字体大小
     disableStdin: false, //是否应禁用输入。
     cursorStyle: "block", //光标样式
-    cursorBlink: true, //光标闪烁
+    cursorBlink: props.cursorBlink, //光标闪烁
     scrollback: 4294967295, //这里的需求是不覆盖原来已经打印出来的信息。但是xterm并没有对应的选项 所以设置一个超大值来防止覆盖
     tabStopWidth: 4,
     theme: {
-      foreground: "yellow", //字体
-      background: "#060101", //背景色
+      foreground: props.foreground, //字体
+      background: props.background, //背景色
       cursor: "help", //设置光标
     },
   });

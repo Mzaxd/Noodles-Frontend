@@ -28,9 +28,22 @@ const snackBarColor = ref();
 const msg = ref("");
 const instance = ref()
 
+const rendererType = ref("");
+const fontSize = ref();
+const cursorBlink = ref();
+const foreground = ref("");
+const background = ref("");
+
 onBeforeMount(() => {
   axios.get("/sshLink/getInstanceInfo/" + sshId.value).then((r) => {
     instance.value = r.data
+  });
+  axios.get("/setting/terminal").then((r) => {
+    rendererType.value = r.data.rendererType
+    fontSize.value = r.data.fontSize
+    foreground.value = r.data.foreground
+    background.value = r.data.background
+    cursorBlink.value = r.data.cursorBlink == 1 ? true : false
   });
 })
 
@@ -79,7 +92,13 @@ onBeforeMount(() => {
         <VDivider vertical />
         <VCol cols="9" sm="10">
           <!-- SECTION Table -->
-          <TerminalCore/>
+          <TerminalCore
+            v-model:rendererType="rendererType"
+            v-model:fontSize="fontSize"
+            v-model:foreground="foreground"
+            v-model:background="background"
+            v-model:cursorBlink="cursorBlink"
+          />
           <!-- !SECTION -->
         </VCol>
       </VRow>
