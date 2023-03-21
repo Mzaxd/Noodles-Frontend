@@ -1,6 +1,8 @@
 <script setup>
-import axios from '@axios'
+import axios from "@axios"
+import { ref } from "vue"
 import { useThemeConfig } from '@core/composable/useThemeConfig'
+import {useRouter} from "vue-router"
 
 const { appContentLayoutNav } = useThemeConfig()
 
@@ -22,12 +24,12 @@ const suggestionGroups = [
       {
         icon: 'tabler-chart-bubble',
         title: '虚拟机',
-        url: { name: 'instances/vm/list' },
+        url: { name: 'instances-vm-list' },
       },
       {
         icon: 'tabler-brand-docker',
         title: '容器',
-        url: { name: 'instances/container/list' },
+        url: { name: 'instances-container-list' },
       },
     ],
   },
@@ -88,22 +90,19 @@ const suggestionGroups = [
 // 👉 No Data suggestion
 const noDataSuggestions = [
   {
-    title: 'Analytics Dashboard',
-    icon: 'tabler-shopping-cart',
-    url: { name: 'dashboards-analytics' },
+    title: '物理机',
+    icon: 'tabler-server',
+    url: { name: 'instances-server-list' },
   },
   {
-    title: 'Account Settings',
-    icon: 'tabler-user',
-    url: {
-      name: 'pages-account-settings-tab',
-      params: { tab: 'account' },
-    },
+    title: '虚拟机',
+    icon: 'tabler-chart-bubble',
+    url: { name: 'instances-vm-list' },
   },
   {
-    title: 'Pricing Page',
-    icon: 'tabler-cash',
-    url: { name: 'pages-pricing' },
+    title: '容器',
+    icon: 'tabler-brand-docker',
+    url: { name: 'instances-container-list' },
   },
 ]
 
@@ -113,8 +112,8 @@ const router = useRouter()
 
 // 👉 fetch search result API
 watchEffect(() => {
-  axios.get('/app-bar/search', { params: { q: searchQuery.value } }).then(response => {
-    searchResult.value = response.data
+  axios.get('/app-bar/search', { params: { q: searchQuery.value } }).then((r) => {
+    searchResult.value = r.data
   })
 })
 

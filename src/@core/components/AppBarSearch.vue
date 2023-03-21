@@ -196,7 +196,7 @@ const resolveCategories = val => {
               v-if="'header' in item"
               class="text-disabled"
             >
-              {{ resolveCategories(item.title) }}
+              {{ item.title }}
             </VListSubheader>
 
             <template v-else>
