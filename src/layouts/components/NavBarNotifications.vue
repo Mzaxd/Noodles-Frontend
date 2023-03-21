@@ -118,6 +118,7 @@ const resolveNoticeVariant = (type) => {
               link
               lines="one"
               min-height="66px"
+              @click="router.push('/notification')" block
             >
               <!-- Slot: Prepend -->
               <!-- Handles Avatar: Image, Icon, Text -->
