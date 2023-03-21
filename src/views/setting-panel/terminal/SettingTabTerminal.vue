@@ -31,17 +31,18 @@ const Message = (r) => {
 };
 
 const fetchTerminalSettings = () => {
-  axios.get("/setting/terminal").then((r) => {
-    rendererType.value = r.data.rendererType
-    fontSize.value = r.data.fontSize
-    foreground.value = r.data.foreground
-    background.value = r.data.background
-    cursorBlink.value = r.data.cursorBlink == 1 ? true : false
-  });
-};
+    axios.get("/setting/terminal").then((r) => {
+      rendererType.value = r.data.rendererType
+      fontSize.value = r.data.fontSize
+      foreground.value = r.data.foreground
+      background.value = r.data.background
+      cursorBlink.value = r.data.cursorBlink == 1 ? true : false
+    });
+  }
 
-watchEffect(fetchTerminalSettings);
-
+onBeforeMount(() => {
+  fetchTerminalSettings()
+})
 
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
@@ -56,10 +57,8 @@ const onSubmit = () => {
         Message(r);
       });
       nextTick(() => {
-        refForm.value?.reset();
         refForm.value?.resetValidation();
       });
-      fetchTerminalSettings()
     }
   });
 };

@@ -9,9 +9,9 @@ const isEmailPasswordVisible = ref(false);
 const isFormValid = ref(false);
 const refForm = ref();
 
-const logExpire = ref();
-const checkInstanceStatePeriod = ref();
-const defaultLang = ref("");
+const logExpire = ref(3);
+const checkInstanceStatePeriod = ref(1);
+const defaultLang = ref("ch");
 
 const isDialogVisible = ref(false);
 const isSnackbarVisible = ref(false);
@@ -50,10 +50,8 @@ const onSubmit = () => {
         Message(r);
       });
       nextTick(() => {
-        refForm.value?.reset();
         refForm.value?.resetValidation();
       });
-      fetchSystemSettings()
     }
   });
 };
@@ -83,7 +81,9 @@ const onSubmit = () => {
                       <h6 class="text-sm font-weight-semibold me-2">
                         检测间隔：
                       </h6>
-                      <VSelect :rules="[requiredValidator]" v-model="checkInstanceStatePeriod" :items="[3, 5, 10, 30]"
+                      <!-- <VSelect :rules="[requiredValidator]" v-model="checkInstanceStatePeriod" :items="[3, 5, 10, 30]"
+                        label="实力状态检测间隔时间(分钟)" /> -->
+                      <VTextField type="text" v-model="checkInstanceStatePeriod" disabled
                         label="实力状态检测间隔时间(分钟)" />
                     </div>
                   </VCol>
@@ -92,7 +92,9 @@ const onSubmit = () => {
                       <h6 class="text-sm font-weight-semibold me-2">
                         保持时间：
                       </h6>
-                      <VSelect :rules="[requiredValidator]" v-model="logExpire" :items="[1, 3, 7]"
+                      <!-- <VSelect :rules="[requiredValidator]" v-model="logExpire" :items="[1, 3, 7]"
+                        label="登录状态保持时间(天)" /> -->
+                      <VTextField type="text" v-model="logExpire" disabled
                         label="登录状态保持时间(天)" />
                     </div>
                   </VCol>

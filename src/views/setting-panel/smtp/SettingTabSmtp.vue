@@ -50,10 +50,8 @@ const onSubmit = () => {
         Message(r);
       });
       nextTick(() => {
-        refForm.value?.reset();
         refForm.value?.resetValidation();
       });
-      fetchSmtpSettings()
     }
   });
 };
