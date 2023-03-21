@@ -2,10 +2,12 @@
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
-import axios from "@axios";
+import axios from "@axios"
+import { ref } from "vue"
+
 
 const vuetifyTheme = useTheme()
-const series = []
+const series = ref([])
 const memory = ref([]);
 
 const chartOptions = computed(() => {
@@ -83,7 +85,7 @@ const fetchClusterMemory = () => {
     memory.value = r.data;
     supportTicket.value[0].subtitle = Math.round(r.data.memoryUsedMaxRate * 100) + ' %';
     supportTicket.value[1].subtitle = Math.round(r.data.memoryFree) + " GB";
-    series.push(Math.round(r.data.memoryUsedAvgRate * 100));
+    series.value[0] = Math.round(r.data.memoryUsedAvgRate * 100)
   });
 }
 
@@ -113,17 +115,8 @@ const refresh = () => {
   <VCard title="内存监控" subtitle="所有物理机的内存状态">
     <template #append>
       <div class="mt-n4 me-n2">
-        <VBtn
-          icon
-          color="default"
-          size="x-small"
-          variant="plain"
-        >
-          <VIcon
-            size="22"
-            icon="tabler-refresh"
-            @click="refresh()"
-          />
+        <VBtn icon color="default" size="x-small" variant="plain">
+          <VIcon size="22" icon="tabler-refresh" @click="refresh()" />
         </VBtn>
       </div>
     </template>
@@ -156,7 +149,10 @@ const refresh = () => {
           </VList>
         </VCol>
         <VCol cols="12" md="7" sm="6">
-          <VueApexCharts :options="chartOptions" :series="series" height="360" />
+          <VueApexCharts 
+          :options="chartOptions" 
+          :series="series" 
+          height="360" />
         </VCol>
       </VRow>
     </VCardText>
