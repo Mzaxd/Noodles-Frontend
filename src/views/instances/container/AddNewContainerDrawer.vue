@@ -39,6 +39,7 @@ const description = ref('')
 const avatarUrl = ref('')
 const imageName = ref('')
 const webUi = ref('')
+const serverAddress = ref("")
 const host = ref()
 const notifySwitch = ref(false)
 const notifyType = ref()
@@ -69,6 +70,7 @@ const onSubmit = () => {
         avatar: avatarUrl.value,
         imageName: imageName.value,
         webUi: webUi.value,
+        serverAddress: serverAddress.value,
         hostMachineId: host.value,
         notify: notifyType.value,
         sshType: sshType.value,
@@ -146,6 +148,11 @@ const handleDrawerModelValueUpdate = val => {
               <!-- 👉 webUi -->
               <VCol cols="12">
                 <VTextField v-model="webUi" label="WebUi地址" prepend-inner-icon="tabler-edit-circle" />
+              </VCol>
+
+              <!-- 👉 serverAddress -->
+              <VCol cols="12">
+                <VTextField v-model="serverAddress" label="服务地址(IP + 端口号)" prepend-inner-icon="tabler-edit-circle" />
               </VCol>
 
               <!-- 👉 Plan -->

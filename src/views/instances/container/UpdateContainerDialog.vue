@@ -30,6 +30,7 @@ const description = ref('')
 const avatarUrl = ref('')
 const imageName = ref('')
 const webUi = ref('')
+const serverAddress = ref('')
 let allHost = ref([])
 const host = ref()
 const notifySwitch = ref(true);
@@ -44,32 +45,6 @@ const containerId = ref("")
 const isPasswordVisible = ref(false)
 
 
-watchEffect(() => {
-  if (props.updateContainerId != undefined) {
-    axios.get('/container/' + props.updateContainerId).then(r => {
-      id.value = r.data.id
-      name.value = r.data.name,
-        description.value = r.data.description,
-        avatarUrl.value = r.data.avatar,
-        imageName.value = r.data.imageName
-      webUi.value = r.data.webUi
-      host.value = r.data.hostMachineId,
-        (notifyType.value = r.data.notify),
-        (sshType.value = r.data.sshType),
-        (sshHost.value = r.data.sshHost),
-        (sshPort.value = r.data.sshPort),
-        (sshUser.value = r.data.sshUser),
-        (sshPwd.value = r.data.sshPwd),
-        (containerId.value = r.data.containerId)
-      if (notifyType.value == 0) {
-        notifySwitch.value = false;
-      } else {
-        notifySwitch.value = true;
-      }
-    })
-  }
-})
-
 const fetchContainerData = () => {
   if (props.updateContainerId != undefined) {
     axios.get('/container/' + props.updateContainerId).then(r => {
@@ -77,9 +52,10 @@ const fetchContainerData = () => {
       name.value = r.data.name,
         description.value = r.data.description,
         avatarUrl.value = r.data.avatar,
-        imageName.value = r.data.imageName
-      webUi.value = r.data.webUi
-      host.value = r.data.hostMachineId,
+        imageName.value = r.data.imageName,
+        webUi.value = r.data.webUi,
+        serverAddress.value = r.data.serverAddress,
+        host.value = r.data.hostMachineId,
         (notifyType.value = r.data.notify),
         (sshType.value = r.data.sshType),
         (sshHost.value = r.data.sshHost),
@@ -95,6 +71,11 @@ const fetchContainerData = () => {
     })
   }
 }
+
+watchEffect(() => {
+  fetchContainerData()
+})
+
 
 
 // 👉 drawer close
@@ -108,7 +89,6 @@ const closeNavigationDrawer = () => {
 }
 
 const onSubmit = () => {
-  console.log(host.value)
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       emit('containerData', {
@@ -118,6 +98,7 @@ const onSubmit = () => {
         avatar: avatarUrl.value,
         imageName: imageName.value,
         webUi: webUi.value,
+        serverAddress: serverAddress.value,
         hostMachineId: host.value,
         notify: notifySwitch.value ? notifyType.value : 0,
         sshType: sshType.value,
@@ -129,9 +110,6 @@ const onSubmit = () => {
       })
       emit('update:isDrawerOpen', false)
       nextTick(() => {
-        refForm.value?.reset()
-        refForm.value?.resetValidation()
-        fetchContainerData()
       })
     }
   })
@@ -204,6 +182,11 @@ const allNotify = [
 
             <VCol cols="12">
               <VTextField v-model="webUi" label="WebUi地址" prepend-inner-icon="tabler-edit-circle" />
+            </VCol>
+
+            <!-- 👉 serverAddress -->
+            <VCol cols="12">
+              <VTextField v-model="serverAddress" label="服务地址(IP + 端口号)" prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 Plan -->
