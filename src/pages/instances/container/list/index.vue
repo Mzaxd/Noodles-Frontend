@@ -5,6 +5,7 @@ import UpdateContainerDialog from "@/views/instances/container/UpdateContainerDi
 import axios from "@axios";
 import qs from "qs";
 import { ref } from "vue";
+import { avatarText } from '@core/utils/formatters'
 
 const snackBarlocation = ref("top");
 const snackBarColor = ref();

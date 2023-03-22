@@ -200,6 +200,7 @@ const resolveNotifyVariant = (notify) => {
 const newPage = (url) => {
   window.open(url);
 };
+
 const newTerminalPage = (sshId) => {
   const protocol = window.location.protocol;
   const host = window.location.host;
