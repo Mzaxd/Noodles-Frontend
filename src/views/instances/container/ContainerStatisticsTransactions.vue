@@ -24,10 +24,10 @@ const statistics = ref([
     color: 'error',
   },
   {
-    title: '暂停',
+    title: '未知',
     num: 0,
     icon: 'tabler-server',
-    color: 'warning',
+    color: 'secondary',
   },
 ])
 
@@ -40,7 +40,7 @@ const update = () => {
     statistics.value[0].num = r.data.total
     statistics.value[1].num = r.data.running
     statistics.value[2].num = r.data.exited
-    statistics.value[3].num = r.data.paused
+    statistics.value[3].num = r.data.unknown
   })
 }
 

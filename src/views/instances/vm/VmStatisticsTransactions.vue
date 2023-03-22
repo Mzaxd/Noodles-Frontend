@@ -24,10 +24,10 @@ const statistics = ref([
     color: 'error',
   },
   {
-    title: '睡眠',
+    title: '未知',
     num: 0,
     icon: 'tabler-server',
-    color: 'warning',
+    color: 'secondary',
   },
 ])
 
@@ -40,7 +40,7 @@ const update = () => {
     statistics.value[0].num = r.data.total
     statistics.value[1].num = r.data.online
     statistics.value[2].num = r.data.offline
-    statistics.value[3].num = r.data.sleep
+    statistics.value[3].num = r.data.unknown
   })
 }
 
