@@ -15,9 +15,8 @@ const onOpen = () => {
 };
 
 const onMessage = (event) => {
-  // console.log('WebSocket收到消息:', event.data)
+  console.log('WebSocket收到消息:', event.data)
   dynamicData = JSON.parse(event.data);
-  console.log(dynamicData);
   update();
 };
 
@@ -117,8 +116,15 @@ const update = () => {
   statistics.value[0].num = dynamicData[hostId.value].cpuLoad + " %";
   statistics.value[1].num = dynamicData[hostId.value].memFree + " GB";
   //rx下行速率 tx上行速率
+  // console.log(dynamicData[hostId.value].rxPercent)
   statistics.value[2].num = dynamicData[hostId.value].rxPercent + " MB/s";
+  if (dynamicData[hostId.value].rxPercent === undefined) {
+    statistics.value[2].num = "None"
+  }
   statistics.value[3].num = dynamicData[hostId.value].txPercent + " MB/s";
+  if (dynamicData[hostId.value].rxPercent === undefined) {
+    statistics.value[3].num = "None"
+  }
 };
 </script>
 
