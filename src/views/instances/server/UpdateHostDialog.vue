@@ -86,32 +86,6 @@ const closeNavigationDrawer = () => {
   });
 };
 
-watchEffect(() => {
-  if (props.updateHostId != undefined) {
-    axios.get("/host/host/" + props.updateHostId).then((r) => {
-      (id.value = r.data.id),
-        (name.value = r.data.name),
-        (description.value = r.data.description),
-        (avatarUrl.value = r.data.avatar),
-        (kernel.value = r.data.osKernel),
-        (manageIp.value = r.data.manageIp),
-        (protocol.value = r.data.protocol),
-        (ip.value = r.data.ip),
-        (port.value = r.data.port),
-        (notifyType.value = r.data.notify),
-        (sshHost.value = r.data.sshHost),
-        (sshPort.value = r.data.sshPort),
-        (sshUser.value = r.data.sshUser),
-        (sshPwd.value = r.data.sshPwd);
-      if (notifyType.value == 0) {
-        notifySwitch.value = false;
-      } else {
-        notifySwitch.value = true;
-      }
-    });
-  }
-});
-
 const fetchHostData = () => {
   if (props.updateHostId != undefined) {
     axios.get("/host/host/" + props.updateHostId).then((r) => {
@@ -138,6 +112,10 @@ const fetchHostData = () => {
   }
 };
 
+watchEffect(() => {
+  fetchHostData()
+});
+
 const onSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
@@ -159,9 +137,6 @@ const onSubmit = () => {
       });
       emit("update:isDrawerOpen", false);
       nextTick(() => {
-        refForm.value?.reset();
-        refForm.value?.resetValidation();
-        fetchHostData();
       });
     }
   });
