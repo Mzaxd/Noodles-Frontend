@@ -29,6 +29,7 @@ const memory = ref();
 const kernel = ref();
 const osName = ref();
 const manageIp = ref();
+const serverAddress = ref('')
 let allHost = ref([]);
 const host = ref();
 const notifySwitch = ref(true);
@@ -144,33 +145,6 @@ const allNotify = [
   },
 ];
 
-watchEffect(() => {
-  if (props.updateVmId != undefined) {
-    axios.get("/host/vm/" + props.updateVmId).then((r) => {
-      id.value = r.data.id;
-      (name.value = r.data.name),
-        (description.value = r.data.description),
-        (avatarUrl.value = r.data.avatar),
-        (thread.value = r.data.threads),
-        (memory.value = r.data.memory),
-        (kernel.value = r.data.osKernel),
-        (osName.value = r.data.osName),
-        (manageIp.value = r.data.manageIp),
-        (host.value = r.data.hostMachineId),
-        (notifyType.value = r.data.notify),
-        (sshHost.value = r.data.sshHost),
-        (sshPort.value = r.data.sshPort),
-        (sshUser.value = r.data.sshUser),
-        (sshPwd.value = r.data.sshPwd);
-      if (notifyType.value == 0) {
-        notifySwitch.value = false;
-      } else {
-        notifySwitch.value = true;
-      }
-    });
-  }
-});
-
 const fetchVmData = () => {
   if (props.updateVmId != undefined) {
     axios.get("/host/vm/" + props.updateVmId).then((r) => {
@@ -183,6 +157,7 @@ const fetchVmData = () => {
         (kernel.value = r.data.osKernel),
         (osName.value = r.data.osName),
         (manageIp.value = r.data.manageIp),
+        serverAddress.value = r.data.serverAddress,
         (host.value = r.data.hostMachineId),
         (notifyType.value = r.data.notify),
         (sshHost.value = r.data.sshHost),
@@ -197,6 +172,12 @@ const fetchVmData = () => {
     });
   }
 };
+
+watchEffect(() => {
+  fetchVmData()
+});
+
+
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
@@ -222,6 +203,7 @@ const onSubmit = () => {
         osKernel: kernel.value,
         osName: osName.value,
         manageIp: manageIp.value,
+        serverAddress: serverAddress.value,
         hostMachineId: host.value,
         notify: notifySwitch.value ? notifyType.value : 0,
         sshHost: sshHost.value,
@@ -231,9 +213,6 @@ const onSubmit = () => {
       });
       emit("update:isDrawerOpen", false);
       nextTick(() => {
-        refForm.value?.reset();
-        refForm.value?.resetValidation();
-        fetchVmData();
       });
     }
   });
@@ -261,15 +240,8 @@ const resolveHostAvatar = (rawAvatar) => {
 </script>
 
 <template>
-  <VDialog
-    persistent
-    temporary
-    :width="600"
-    location="end"
-    class="scrollable-content"
-    :model-value="props.isDrawerOpen"
-    @update:model-value="handleDrawerModelValueUpdate"
-  >
+  <VDialog persistent temporary :width="600" location="end" class="scrollable-content" :model-value="props.isDrawerOpen"
+    @update:model-value="handleDrawerModelValueUpdate">
     <VCard title="编辑虚拟机">
       <VCardText>
         <!-- 👉 Form -->
@@ -277,82 +249,50 @@ const resolveHostAvatar = (rawAvatar) => {
           <VRow>
             <!-- 👉 Full name -->
             <VCol cols="12">
-              <VTextField
-                v-model="name"
-                :rules="[requiredValidator]"
-                label="名称（必填）"
-                prepend-inner-icon="tabler-edit-circle"
-              />
+              <VTextField v-model="name" :rules="[requiredValidator]" label="名称（必填）"
+                prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 Email -->
             <VCol cols="12">
-              <VTextField
-                v-model="description"
-                :rules="[requiredValidator]"
-                label="描述（必填）"
-                prepend-inner-icon="tabler-edit-circle"
-              />
+              <VTextField v-model="description" :rules="[requiredValidator]" label="描述（必填）"
+                prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 company -->
             <VCol cols="12">
-              <VTextField
-                v-model="avatarUrl"
-                label="图标Url"
-                prepend-inner-icon="tabler-edit-circle"
-              />
+              <VTextField v-model="avatarUrl" label="图标Url" prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 company -->
             <VCol cols="12">
-              <VTextField
-                v-model="manageIp"
-                label="管理界面IP地址(如果有)"
-                prepend-inner-icon="tabler-edit-circle"
-              />
+              <VTextField v-model="manageIp" label="管理界面IP地址(如果有)" prepend-inner-icon="tabler-edit-circle" />
+            </VCol>
+
+            <!-- 👉 serverAddress -->
+            <VCol cols="12">
+              <VTextField v-model="serverAddress" label="IP地址(不带协议端口号)" prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 Country -->
             <VCol cols="12" sm="6">
-              <VTextField
-                v-model="thread"
-                type="number"
-                label="分配线程数"
-                prepend-inner-icon="tabler-selector"
-              />
+              <VTextField v-model="thread" type="number" label="分配线程数" prepend-inner-icon="tabler-selector" />
             </VCol>
 
             <!-- 👉 Contact -->
             <VCol cols="12" sm="6">
-              <VSelect
-                v-model="memory"
-                label="分配内存"
-                :items="allMemory"
-                prepend-inner-icon="tabler-select"
-              />
+              <VSelect v-model="memory" label="分配内存" :items="allMemory" prepend-inner-icon="tabler-select" />
             </VCol>
 
             <!-- 👉 company -->
             <VCol cols="12">
-              <VTextField
-                v-model="osName"
-                label="操作系统"
-                prepend-inner-icon="tabler-edit-circle"
-              />
+              <VTextField v-model="osName" label="操作系统" prepend-inner-icon="tabler-edit-circle" />
             </VCol>
 
             <!-- 👉 Role -->
             <VCol cols="12" sm="6">
-              <VSelect
-                v-model="kernel"
-                label="系统内核（必填）"
-                :rules="[requiredValidator]"
-                :items="allKernel"
-                clearable
-                clear-icon="tabler-x"
-                prepend-inner-icon="tabler-select"
-              >
+              <VSelect v-model="kernel" label="系统内核（必填）" :rules="[requiredValidator]" :items="allKernel" clearable
+                clear-icon="tabler-x" prepend-inner-icon="tabler-select">
                 <template #selection="{ item }">
                   <VChip>
                     <VAvatar start rounded="lg">
@@ -366,17 +306,8 @@ const resolveHostAvatar = (rawAvatar) => {
 
             <!-- 👉 Plan -->
             <VCol cols="12" sm="6">
-              <VSelect
-                v-model="host"
-                label="宿主机（必填）"
-                :rules="[requiredValidator]"
-                :items="allHost"
-                item-title="name"
-                item-value="id"
-                clearable
-                clear-icon="tabler-x"
-                prepend-inner-icon="tabler-select"
-              >
+              <VSelect v-model="host" label="宿主机（必填）" :rules="[requiredValidator]" :items="allHost" item-title="name"
+                item-value="id" clearable clear-icon="tabler-x" prepend-inner-icon="tabler-select">
                 <template #selection="{ item }">
                   <VChip>
                     <VAvatar rounded="lg" :image="item.raw.avatar" />
@@ -407,8 +338,7 @@ const resolveHostAvatar = (rawAvatar) => {
             </VCol>
             <!-- 👉 company -->
             <VCol cols="7">
-              <VTextField v-model="sshPwd" label="密码"
-                :type="isPasswordVisible ? 'text' : 'password'"
+              <VTextField v-model="sshPwd" label="密码" :type="isPasswordVisible ? 'text' : 'password'"
                 prepend-inner-icon="tabler-edit-circle"
                 :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                 @click:append-inner="isPasswordVisible = !isPasswordVisible" />
@@ -422,34 +352,17 @@ const resolveHostAvatar = (rawAvatar) => {
               <VDivider />
             </VCol>
             <VCol cols="3">
-              <VSwitch
-                v-model="notifySwitch"
-                label="离线提醒"
-                color="primary"
-                :true-value="true"
-                :false-value="false"
-              />
+              <VSwitch v-model="notifySwitch" label="离线提醒" color="primary" :true-value="true" :false-value="false" />
             </VCol>
             <VCol cols="6">
-              <VSelect
-                :disabled="!notifySwitch"
-                v-model="notifyType"
-                label="提醒方式"
-                prepend-inner-icon="tabler-select"
-                :rules="[requiredValidator]"
-                :items="allNotify"
-              />
+              <VSelect :disabled="!notifySwitch" v-model="notifyType" label="提醒方式" prepend-inner-icon="tabler-select"
+                :rules="[requiredValidator]" :items="allNotify" />
             </VCol>
 
             <!-- 👉 Submit and Cancel -->
             <VCardText class="d-flex justify-end flex-wrap gap-3">
               <VBtn type="submit" class="me-3"> 保存 </VBtn>
-              <VBtn
-                type="reset"
-                variant="tonal"
-                color="secondary"
-                @click="closeNavigationDrawer"
-              >
+              <VBtn type="reset" variant="tonal" color="secondary" @click="closeNavigationDrawer">
                 取消
               </VBtn>
             </VCardText>

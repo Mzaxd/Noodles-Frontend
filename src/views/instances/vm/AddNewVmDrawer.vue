@@ -26,6 +26,7 @@ const kernel = ref();
 const host = ref();
 const osName = ref();
 const manageIp = ref();
+const serverAddress = ref("")
 let allHost = ref([]);
 const notifySwitch = ref(false)
 const notifyType = ref()
@@ -210,6 +211,7 @@ const onSubmit = () => {
         osKernel: kernel.value,
         osName: osName.value,
         manageIp: manageIp.value,
+        serverAddress: serverAddress.value,
         hostMachineId: host.value,
         notify: notifyType.value,
         sshHost: sshHost.value,
@@ -284,6 +286,11 @@ const resolveOsAvatar = (kernel) => {
               <!-- 👉 company -->
               <VCol cols="12">
                 <VTextField v-model="manageIp" label="管理界面IP地址(如果有)" prepend-inner-icon="tabler-edit-circle" />
+              </VCol>
+
+              <!-- 👉 serverAddress -->
+              <VCol cols="12">
+                <VTextField v-model="serverAddress" label="IP地址(不带协议端口号)" prepend-inner-icon="tabler-edit-circle" />
               </VCol>
 
               <!-- 👉 Country -->
