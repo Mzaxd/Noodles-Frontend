@@ -12,7 +12,7 @@
         class="mx-1"
       />
       By <a
-        href="https://pixinvent.com"
+        href="https://github.com/Mzaxd"
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary ms-1"
