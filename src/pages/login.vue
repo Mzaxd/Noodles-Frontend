@@ -157,7 +157,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <VTextField
                   v-model="email"
-                  label="Email"
+                  label="邮箱账号"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
                   :error-messages="errors.email"
@@ -168,7 +168,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <VTextField
                   v-model="password"
-                  label="Password"
+                  label="密码"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
                   :error-messages="errors.password"

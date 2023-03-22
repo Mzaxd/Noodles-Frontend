@@ -3,15 +3,15 @@ import { isEmpty, isEmptyArray, isNullOrUndefined } from './index'
 // 👉 Required Validator
 export const requiredValidator = value => {
   if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
-    return 'This field is required'
+    return '此项为必填项'
   
-  return !!String(value).trim().length || 'This field is required'
+  return !!String(value).trim().length || '此项为必填项'
 }
 
 export const associationValidator = (value, target) => {
   if (target) {
     if (isNullOrUndefined(value) || isEmptyArray(value) || value === false)
-    return 'This field is required'
+    return '此项为必填项'
   }
   return true
 }
@@ -22,9 +22,9 @@ export const emailValidator = value => {
     return true
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   if (Array.isArray(value))
-    return value.every(val => re.test(String(val))) || 'The Email field must be a valid email'
+    return value.every(val => re.test(String(val))) || '请输入正确的邮箱'
   
-  return re.test(String(value)) || 'The Email field must be a valid email'
+  return re.test(String(value)) || '请输入正确的邮箱'
 }
 
 // 👉 Password Validator
@@ -35,11 +35,11 @@ export const passwordValidator = password => {
   return (
     // eslint-disable-next-line operator-linebreak
     validPassword ||
-        'Field must contain at least one uppercase, lowercase, special character and digit with min 8 chars')
+        '字段必须包含至少一个大写字母、小写字母、特殊字符和最小8个字符的数字')
 }
 
 // 👉 Confirm Password Validator
-export const confirmedValidator = (value, target) => value === target || 'The Confirm Password field confirmation does not match'
+export const confirmedValidator = (value, target) => value === target || '密码和确认密码不匹配'
 
 // 👉 Between Validator
 export const betweenValidator = (value, min, max) => {
