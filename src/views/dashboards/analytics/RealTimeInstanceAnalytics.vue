@@ -29,21 +29,21 @@ const panelReports = ref([
     icon: 'tabler-server',
     title: '物理机',
     amount: '',
-    progress: '100',
+    progress: '0',
   },
   {
     color: 'info',
     icon: 'tabler-server',
     title: '虚拟机',
     amount: '',
-    progress: '75',
+    progress: '0',
   },
   {
     color: 'error',
     icon: 'tabler-brand-docker',
     title: '容器',
     amount: '',
-    progress: '50',
+    progress: '0',
   },
 ])
 

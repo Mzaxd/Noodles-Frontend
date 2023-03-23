@@ -32,19 +32,19 @@ const InstanceHistoryData = ref([
     slideImg: sliderBar1,
     data: [
       {
-        number: '1.5k',
+        number: '0',
         text: '总',
       },
       {
-        number: '3.1k',
+        number: '0',
         text: '在线',
       },
       {
-        number: '1.2k',
+        number: '0',
         text: '离线',
       },
       {
-        number: '12%',
+        number: '0',
         text: '未知',
       },
     ],
@@ -54,19 +54,19 @@ const InstanceHistoryData = ref([
     slideImg: sliderBar2,
     data: [
       {
-        number: '1.5k',
+        number: '0',
         text: '总',
       },
       {
-        number: '3.1k',
+        number: '0',
         text: '在线',
       },
       {
-        number: '1.2k',
+        number: '0',
         text: '离线',
       },
       {
-        number: '12%',
+        number: '0',
         text: '未知',
       },
     ],
@@ -76,19 +76,19 @@ const InstanceHistoryData = ref([
     slideImg: sliderBar3,
     data: [
       {
-        number: '1.5k',
+        number: '0',
         text: '总',
       },
       {
-        number: '3.1k',
+        number: '0',
         text: '在线',
       },
       {
-        number: '1.2k',
+        number: '0',
         text: '离线',
       },
       {
-        number: '12%',
+        number: '0',
         text: '未知',
       },
     ],
