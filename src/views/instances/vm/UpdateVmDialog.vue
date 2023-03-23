@@ -173,11 +173,6 @@ const fetchVmData = () => {
   }
 };
 
-watchEffect(() => {
-  fetchVmData()
-});
-
-
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
@@ -222,6 +217,7 @@ onBeforeMount(() => {
   axios.get("/host/drawer").then((r) => {
     allHost = r.data;
   });
+  fetchVmData()
 });
 
 const handleDrawerModelValueUpdate = (val) => {

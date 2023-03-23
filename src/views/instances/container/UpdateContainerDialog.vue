@@ -77,7 +77,6 @@ watchEffect(() => {
 })
 
 
-
 // 👉 drawer close
 const closeNavigationDrawer = () => {
   emit('update:isDrawerOpen', false)
@@ -119,6 +118,7 @@ onBeforeMount(() => {
   axios.get('/container/allHost').then(r => {
     allHost = r.data
   })
+  fetchContainerData()
 })
 
 const handleDrawerModelValueUpdate = val => {
