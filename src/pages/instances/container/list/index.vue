@@ -276,13 +276,13 @@ const newTerminalPage = (sshId) => {
               </div>
 
               <!-- 👉 Export button -->
-              <VBtn
+              <!-- <VBtn
                 variant="tonal"
                 color="secondary"
                 prepend-icon="tabler-screen-share"
               >
                 导出(Excel)
-              </VBtn>
+              </VBtn> -->
 
               <!-- 👉 Add container button -->
               <VBtn
