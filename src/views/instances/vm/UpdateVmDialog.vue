@@ -173,6 +173,10 @@ const fetchVmData = () => {
   }
 };
 
+// 👉 watching current page
+watchEffect(() => {
+  fetchVmData()
+});
 
 // 👉 drawer close
 const closeNavigationDrawer = () => {
