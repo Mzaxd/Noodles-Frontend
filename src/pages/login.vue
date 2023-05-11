@@ -128,10 +128,10 @@ const onSubmit = () => {
           />
 
           <h5 class="text-h5 font-weight-semibold mb-1">
-            Welcome to {{ themeConfig.app.title }}! 👋🏻
+            欢迎来到 {{ themeConfig.app.title }}! 👋🏻
           </h5>
           <p class="mb-0">
-            Please sign-in to your account and start the adventure
+            请登录你的账户，开始使用【轻量级服务器管理云】。
           </p>
         </VCardText>
         <VCardText  v-if="isFirstUse">

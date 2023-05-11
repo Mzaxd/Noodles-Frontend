@@ -65,20 +65,7 @@ const onSubmit = () => {
 
 <template>
   <div>
-    <VCard class="mb-6" title="欢迎使用Noodles服务管理平台 🚀">
-      <VCardText>All the best for your new project.</VCardText>
-      <VCardText>
-        Please make sure to read our
-        <a
-          href="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-decoration-none"
-        >
-          Template Documentation
-        </a>
-        to understand where to go from here and how to use our template.
-      </VCardText>
+    <VCard class="mb-6" title="欢迎使用【轻量级服务器管理私有云平台】 🚀">
     </VCard>
 
     <VDialog v-model="isDialogVisible" persistent class="v-dialog-sm">

@@ -76,12 +76,7 @@ const suggestionGroups = [
         icon: 'tabler-bell',
         title: '通知提醒',
         url: { name: 'notification' },
-      },
-      {
-        icon: 'tabler-help',
-        title: '帮助文档',
-        url: { name: 'help-center' },
-      },
+      }
     ],
   },
 
